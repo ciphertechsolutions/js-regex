@@ -2,8 +2,13 @@
 from __future__ import unicode_literals
 
 import re
-import sre_constants
-import sre_parse
+import sys
+try: # pragma: no cover
+    import re._parser as sre_parse
+    import re._constants as sre_constants
+except ImportError: # pragma: no cover
+    import sre_parse
+    import sre_constants
 from sys import version_info as python_version
 
 try:
@@ -44,8 +49,9 @@ def compile(pattern, flags=0):
     # and the list of flags at https://docs.python.org/3/library/re.html#re.compile
     if flags & re.LOCALE:
         raise NotJavascriptRegex("The re.LOCALE flag has no equivalent in Javascript")
-    if flags & re.TEMPLATE:
-        raise NotJavascriptRegex("The re.TEMPLATE flag has no equivalent in Javascript")
+    if sys.version_info < (3, 13): # pragma: no cover
+        if flags & re.TEMPLATE:
+            raise NotJavascriptRegex("The re.TEMPLATE flag has no equivalent in Javascript")
     if flags & re.VERBOSE:
         raise NotJavascriptRegex("The re.VERBOSE flag has no equivalent in Javascript")
 
