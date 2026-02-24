@@ -21,7 +21,7 @@ with open(local_file("src/js_regex/__init__.py")) as o:
 
 
 setuptools.setup(
-    name="js-regex",
+    name="js-regex2",
     version=__version__,
     author="Cipher Tech Solutions",
     author_email="opensource@ciphertechsolutions.com",
