@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import re
 from sys import version_info as python_version
+import sys
 
 import pytest
 
@@ -126,15 +127,28 @@ def test_pattern_validation(pattern, error):
         js_regex.compile(pattern)
 
 
-@pytest.mark.parametrize(
-    "flags,error",
-    [
-        ("flags", TypeError),
-        (re.LOCALE, js_regex.NotJavascriptRegex),
-        (re.TEMPLATE, js_regex.NotJavascriptRegex),
-        (re.VERBOSE, js_regex.NotJavascriptRegex),
-    ],
-)
-def test_flags_validation(flags, error):
-    with pytest.raises(error):
-        js_regex.compile("", flags=flags)
+if sys.version_info < (3, 13):
+    @pytest.mark.parametrize(
+        "flags,error",
+        [
+            ("flags", TypeError),
+            (re.LOCALE, js_regex.NotJavascriptRegex),
+            (re.TEMPLATE, js_regex.NotJavascriptRegex),
+            (re.VERBOSE, js_regex.NotJavascriptRegex),
+        ]
+    )
+    def test_flags_validation(flags, error):
+        with pytest.raises(error):
+            js_regex.compile("", flags=flags)
+else:
+    @pytest.mark.parametrize(
+        "flags,error",
+        [
+            ("flags", TypeError),
+            (re.LOCALE, js_regex.NotJavascriptRegex),
+            (re.VERBOSE, js_regex.NotJavascriptRegex),
+        ],
+    )
+    def test_flags_validation(flags, error):
+        with pytest.raises(error):
+            js_regex.compile("", flags=flags)
