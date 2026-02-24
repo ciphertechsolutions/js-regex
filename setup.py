@@ -33,6 +33,12 @@ setuptools.setup(
     description="A thin compatibility layer to use Javascript regular expressions in Python",
     zip_safe=False,
     install_requires=[],
+    extras_require={
+        "test": [
+            "pytest",
+            "pytest-cov",
+        ]
+    },
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*",
     classifiers=[
         "Development Status :: 4 - Beta",
